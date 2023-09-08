@@ -1,0 +1,80 @@
+
+
+SQL> select * from emps;
+
+       EID ENAME                DEPT_NAME               DEPT_ID
+---------- -------------------- -------------------- ----------
+         1 Maria                Mca                        2222
+         2 Miya                 Mba                        2221
+         3 Mira                 Mca                        2223
+
+SQL> insert into emps values(4,'Leka','mba',2224);
+
+1 row created.
+
+SQL> select * from trigg_logg;
+
+LOGS
+--------------------------------------------------------------------------------
+A new row in emps is inserted
+A new row has been updated on emps
+A new row in emps is inserted
+
+
+
+SQL> update emps set dept_name='cse'where eid=1;
+
+1 row updated.
+
+SQL> select * from trigg_logg;
+
+LOGS
+--------------------------------------------------------------------------------
+A new row in emps is inserted
+A new row has been updated on emps
+A new row in emps is inserted
+A new row has been updated on emps
+
+
+
+
+SQL> create trigger trig_emp_update_old_new after update on emps
+  2  for each row
+  3  begin
+  4  insert into trigg_logg values(concat('You have updated an employee with name:',:NEW.ename));
+  5  insert into trigg_logg values(concat('You have removed an employee with name:',:OLD.ename));
+  6  END;
+  7  /
+
+Trigger created.
+
+
+
+SQL> select * from emps;
+
+       EID ENAME                DEPT_NAME               DEPT_ID
+---------- -------------------- -------------------- ----------
+         1 Maria                cse                        2222
+         2 Miya                 Mba                        2221
+         3 Mira                 Mca                        2223
+         4 Leka                 mba                        2224
+
+SQL> update emps set ename='Ram' where eid=2;
+
+1 row updated.
+
+SQL> select * from trigg_logg;
+
+LOGS
+--------------------------------------------------------------------------------
+A new row in emps is inserted
+A new row has been updated on emps
+A new row in emps is inserted
+A new row has been updated on emps
+You have updated an employee with name:Ram
+You have removed an employee with name:Miya
+A new row has been updated on emps
+
+7 rows selected.
+
+SQL>

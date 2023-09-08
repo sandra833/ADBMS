@@ -1,0 +1,140 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Thu Sep 7 10:07:01 2023
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: System
+Enter password:
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> create table students(name varchar(20),id int,s varchar(10),salary int);
+create table students(name varchar(20),id int,s varchar(10),salary int)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table s(name varchar(20),id int,s varchar(10),salary int);
+create table s(name varchar(20),id int,s varchar(10),salary int)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table stud(name varchar(20),id int,s varchar(10),salary int);
+create table stud(name varchar(20),id int,s varchar(10),salary int)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table s_table(name varchar(20),id int,s varchar(10),salary int);
+
+Table created.
+
+SQL> desc s_table;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ NAME                                               VARCHAR2(20)
+ ID                                                 NUMBER(38)
+ S                                                  VARCHAR2(10)
+ SALARY                                             NUMBER(38)
+
+SQL> insert into d_table values('vikram',1,"m",100);
+insert into d_table values('vikram',1,"m",100)
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist
+
+
+SQL> insert into s_table values('vikram',1,"m",100);
+insert into s_table values('vikram',1,"m",100)
+                                      *
+ERROR at line 1:
+ORA-00984: column not allowed here
+
+
+SQL> insert into s_table values('vikram',1,'m',100);
+
+1 row created.
+
+SQL> insert into s_table values('anu',2,'f',200);
+
+1 row created.
+
+SQL> insert into s_table values('ria',3,'f',300);
+
+1 row created.
+
+SQL> select * from s_table;
+
+NAME                         ID S              SALARY
+-------------------- ---------- ---------- ----------
+vikram                        1 m                 100
+anu                           2 f                 200
+ria                           3 f                 300
+
+SQL> update s_table set salary=90000 where name='ria';
+
+1 row updated.
+
+SQL> select * from s_table;
+
+NAME                         ID S              SALARY
+-------------------- ---------- ---------- ----------
+vikram                        1 m                 100
+anu                           2 f                 200
+ria                           3 f               90000
+
+SQL> delete from s_table where salary=100;
+
+1 row deleted.
+
+SQL> select * from s_table;
+
+NAME                         ID S              SALARY
+-------------------- ---------- ---------- ----------
+anu                           2 f                 200
+ria                           3 f               90000
+
+SQL> commit;
+
+Commit complete.
+
+SQL> delete from s_table where salary=200;
+
+1 row deleted.
+
+SQL> select * from s_table;
+
+NAME                         ID S              SALARY
+-------------------- ---------- ---------- ----------
+ria                           3 f               90000
+
+SQL> delete from s_table;
+
+1 row deleted.
+
+SQL> select * from s_table;
+
+no rows selected
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> select * from s_table;
+
+NAME                         ID S              SALARY
+-------------------- ---------- ---------- ----------
+anu                           2 f                 200
+ria                           3 f               90000
+
+SQL>

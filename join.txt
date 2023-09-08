@@ -1,0 +1,242 @@
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.36 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database join;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'join' at line 1
+
+mysql> create database table_join;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use table_join;
+Database changed
+mysql> create table e(e_id int,e_name varchar(20),d_id int,manager_id varchar(20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> create table e(e_id int,e_name varchar(20),d_id int,manager_id varchar(20));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> cretae table d(d_id int,d_name varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cretae table d(
+d_id int,d_name varchar(20))' at line 1
+mysql> create table d(d_id int,d_name varchar(20));
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> create table m(m_id int,m_name varchar(20),d_id int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table p(p_id int,p_name varchar(20),member_id varchar(20));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show tables;
++----------------------+
+| Tables_in_table_join |
++----------------------+
+| d                    |
+| e                    |
+| m                    |
+| p                    |
++----------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from e;
+Empty set (0.00 sec)
+
+mysql> desc e;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| e_id       | int(11)     | YES  |     | NULL    |       |
+| e_name     | varchar(20) | YES  |     | NULL    |       |
+| d_id       | int(11)     | YES  |     | NULL    |       |
+| manager_id | varchar(20) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.06 sec)
+
+mysql> desc d;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| d_id   | int(11)     | YES  |     | NULL    |       |
+| d_name | varchar(20) | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc m;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| m_id   | int(11)     | YES  |     | NULL    |       |
+| m_name | varchar(20) | YES  |     | NULL    |       |
+| d_id   | int(11)     | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc p;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| p_id      | int(11)     | YES  |     | NULL    |       |
+| p_name    | varchar(20) | YES  |     | NULL    |       |
+| member_id | varchar(20) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> insert into e values(101,"kiran",111,222),(102,"maya",112,223),(103,"ram",113,224);
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from e;
++------+--------+------+------------+
+| e_id | e_name | d_id | manager_id |
++------+--------+------+------------+
+|  101 | kiran  |  111 | 222        |
+|  102 | maya   |  112 | 223        |
+|  103 | ram    |  113 | 224        |
++------+--------+------+------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into d values(111,'mca');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into d values(112,'mca');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into d values(113,'cse');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from d;
++------+--------+
+| d_id | d_name |
++------+--------+
+|  111 | mca    |
+|  112 | mca    |
+|  113 | cse    |
++------+--------+
+3 rows in set (0.00 sec)
+
+mysql> insert into m values(333,'nam',111),(331,'riya',112),(330,'raghu',113);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from m;
++------+--------+------+
+| m_id | m_name | d_id |
++------+--------+------+
+|  333 | nam    |  111 |
+|  331 | riya   |  112 |
+|  330 | raghu  |  113 |
++------+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into p values(001,'data mining',"123"),(002,"e-kart","124"),(003,"web_devop","125");
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from p;
++------+-------------+-----------+
+| p_id | p_name      | member_id |
++------+-------------+-----------+
+|    1 | data mining | 123       |
+|    2 | e-kart      | 124       |
+|    3 | web_devop   | 125       |
++------+-------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select e.e_name,d.d_name from e inner join d on e.d_id=d.d_id
+    -> select e.e_name,d.d_name from e inner join d on e.d_id=d.d_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select e.e_name
+,d.d_name from e inner join d on e.d_id=d.d_id' at line 2
+mysql> select e.e_name,d.d_name from e inner join d on e.d_id=d.d_id;
++--------+--------+
+| e_name | d_name |
++--------+--------+
+| kiran  | mca    |
+| maya   | mca    |
+| ram    | cse    |
++--------+--------+
+3 rows in set (0.01 sec)
+
+mysql> select e.e_name,p.member_id from e inner join p on e.e_id=p.member_id;
+Empty set (0.00 sec)
+
+mysql> drop table p;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into p values(001,'data mining',"101"),(002,"e-kart","102"),(003,"web_devop","103");
+ERROR 1146 (42S02): Table 'table_join.p' doesn't exist
+mysql> create table p(p_id int,p_name varchar(20),member_id varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into p values(001,'data mining',"101"),(002,"e-kart","102"),(003,"web_devop","103");
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select 8 from p;
++---+
+| 8 |
++---+
+| 8 |
+| 8 |
+| 8 |
++---+
+3 rows in set (0.00 sec)
+
+mysql> select * from p;
++------+-------------+-----------+
+| p_id | p_name      | member_id |
++------+-------------+-----------+
+|    1 | data mining | 101       |
+|    2 | e-kart      | 102       |
+|    3 | web_devop   | 103       |
++------+-------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select e.e_name,p.member_id from e inner join p on e.e_id=p.member_id;
++--------+-----------+
+| e_name | member_id |
++--------+-----------+
+| kiran  | 101       |
+| maya   | 102       |
+| ram    | 103       |
++--------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select e.e_name,d.d_name from e left join d on e.d_id=d.d_id;
++--------+--------+
+| e_name | d_name |
++--------+--------+
+| kiran  | mca    |
+| maya   | mca    |
+| ram    | cse    |
++--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select e.e_name,d.d_name from e right join d on e.d_id=d.d_id;
++--------+--------+
+| e_name | d_name |
++--------+--------+
+| kiran  | mca    |
+| maya   | mca    |
+| ram    | cse    |
++--------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select e.e_name,d.d_name,m.m_name p.p_name from e left join d on e.d_id=d.d_id=e.manager_id inner join p on p.member_id=e.e_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '.p_name from e
+left join d on e.d_id=d.d_id=e.manager_id inner join p on p.membe' at line 1
+mysql> select e.e_name,d.d_name,m.m_name,p.p_name from e left join d on e.d_id=d.d_id=e.manager_id inner join p on p.member_id=e.e_id;
+ERROR 1054 (42S22): Unknown column 'm.m_name' in 'field list'
+mysql> select e.e_name,d.d_name,m.manager_name,p.p_name from e left join d on e.d_id=d.d_id=e.manager_id inner join p on p.member_id=e.e_id;
+ERROR 1054 (42S22): Unknown column 'm.manager_name' in 'field list'
+mysql> select e.e_name,d.d_name,m.m_name,p.p_name from e left join d on e.d_id=d.d_id=e.manager_id inner join p on p.member_id=e.e_id;
+ERROR 1054 (42S22): Unknown column 'm.m_name' in 'field list'
+mysql>

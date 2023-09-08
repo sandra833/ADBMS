@@ -1,0 +1,220 @@
+
+SQL*Plus: Release 11.2.0.1.0 Production on Fri Sep 8 05:32:58 2023
+
+Copyright (c) 1982, 2010, Oracle.  All rights reserved.
+
+Enter user-name: System
+Enter password:
+ERROR:
+ORA-28002: the password will expire within 6 days
+
+
+
+Connected to:
+Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+SQL> drop table emps;
+
+Table dropped.
+
+SQL> drop table trigg_logg;
+
+Table dropped.
+
+SQL> create table emps(eid int,ename varchar(20),dept_name varchar(20),dept_id int);
+
+Table created.
+
+SQL> desc emps;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EID                                                NUMBER(38)
+ ENAME                                              VARCHAR2(20)
+ DEPT_NAME                                          VARCHAR2(20)
+ DEPT_ID                                            NUMBER(38)
+
+SQL> insert into emps values(1,'Liya','Mca',2222);
+
+1 row created.
+
+SQL> insert into emps values(2,'Miya','Mba',2221);
+
+1 row created.
+
+SQL> select * from emps;
+
+       EID ENAME                DEPT_NAME               DEPT_ID
+---------- -------------------- -------------------- ----------
+         1 Liya                 Mca                        2222
+         2 Miya                 Mba                        2221
+
+SQL> create table trigg_logg(logs varchar(200));
+
+Table created.
+
+SQL> desc trigg_logg;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ LOGS                                               VARCHAR2(200)
+
+SQL> create trigger trigger_insert after insert on emps
+  2  for each row
+  3  begin
+  4  insert into trigg_logg values('A new row in emps is inserted');
+  5  end;
+  6  /
+
+Trigger created.
+
+SQL> insert into emps values(3,'Mira','Mca',2223);
+
+1 row created.
+
+SQL> select * from trigg_logg;
+
+LOGS
+--------------------------------------------------------------------------------
+A new row in emps is inserted
+
+SQL> create trigger trigger_update after update on emps
+  2  for each row
+  3  begin
+  4  update emps set dept_name='Cse' where eid=1;
+  5  end;
+  6  /
+
+Trigger created.
+
+SQL> create trigger trigger_update after update on emps
+  2  /
+create trigger trigger_update after update on emps
+                                                 *
+ERROR at line 1:
+ORA-04079: invalid trigger specification
+
+
+SQL> create trigger trigger_update1 after update on emps
+  2  for each row
+  3  begin
+  4  insert into trigg_logg values('A new row has been updated on emps');
+  5  end;
+  6  /
+
+Trigger created.
+
+SQL> update emps set dept_name='Cse' where eid=1;
+update emps set dept_name='Cse' where eid=1
+       *
+ERROR at line 1:
+ORA-04091: table SYSTEM.EMPS is mutating, trigger/function may not see it
+ORA-06512: at "SYSTEM.TRIGGER_UPDATE", line 2
+ORA-04088: error during execution of trigger 'SYSTEM.TRIGGER_UPDATE'
+
+
+SQL> update emps set dept_name='Cse' where dept_name='Mca';
+update emps set dept_name='Cse' where dept_name='Mca'
+       *
+ERROR at line 1:
+ORA-04091: table SYSTEM.EMPS is mutating, trigger/function may not see it
+ORA-06512: at "SYSTEM.TRIGGER_UPDATE", line 2
+ORA-04088: error during execution of trigger 'SYSTEM.TRIGGER_UPDATE'
+
+
+SQL> drop trigger trigger_update
+  2  drop trigger trigger_update;
+drop trigger trigger_update
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended
+
+
+SQL> update emps set ename='Maria' where ename='Liya';
+update emps set ename='Maria' where ename='Liya'
+       *
+ERROR at line 1:
+ORA-04091: table SYSTEM.EMPS is mutating, trigger/function may not see it
+ORA-06512: at "SYSTEM.TRIGGER_UPDATE", line 2
+ORA-04088: error during execution of trigger 'SYSTEM.TRIGGER_UPDATE'
+
+
+SQL> crate trigger trigger_delete after delete on emps
+SP2-0734: unknown command beginning "crate trig..." - rest of line ignored.
+SQL> drop trigger trigger_update;
+
+Trigger dropped.
+
+SQL> drop trigger trigger_update1;
+
+Trigger dropped.
+
+SQL> create trigger trigger_update after update on emps
+  2  for each row
+  3  begin
+  4  insert into trigg_logg values('A new row has been updated on emps0;
+  5  end;
+  6  /
+
+Warning: Trigger created with compilation errors.
+
+SQL> drop trigger trigger_update;
+
+Trigger dropped.
+
+SQL> create trigger trigger_update after update on emps
+  2  for each row
+  3  begin
+  4  insert into trigg_logg values('A new row has been updated on emps');
+  5  end;
+  6  /
+
+Trigger created.
+
+SQL> update emps set ename='Maria' where eid=1;
+
+1 row updated.
+
+SQL> select * from emps;
+
+       EID ENAME                DEPT_NAME               DEPT_ID
+---------- -------------------- -------------------- ----------
+         1 Maria                Mca                        2222
+         2 Miya                 Mba                        2221
+         3 Mira                 Mca                        2223
+
+SQL> select * from trigg_logg;
+
+LOGS
+--------------------------------------------------------------------------------
+A new row in emps is inserted
+A new row has been updated on emps
+
+SQL> create trigger trigger_delete after delete on emps
+  2  for each row
+  3  begin
+  4  insert into trigg_logg values('A new row has been deleted on emps');
+  5  end;
+  6  /
+
+Trigger created.
+
+SQL> delete from emps where  eid=3;
+
+1 row deleted.
+
+SQL> select * from emps;
+
+       EID ENAME                DEPT_NAME               DEPT_ID
+---------- -------------------- -------------------- ----------
+         1 Maria                Mca                        2222
+         2 Miya                 Mba                        2221
+
+SQL> select * from trigg_logg;
+
+LOGS
+--------------------------------------------------------------------------------
+A new row in emps is inserted
+A new row has been updated on emps
+A new row has been deleted on emps
+
+SQL>
